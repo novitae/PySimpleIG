@@ -31,7 +31,8 @@ class A1:
             "is_private",
             "is_verified",
             "profile_pic_url_hd",
-            "username"
+            "username",
+            "followed_by_viewer"
         ]
 
         retour = {}
