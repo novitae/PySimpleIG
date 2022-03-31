@@ -1,7 +1,7 @@
 import requests
 
 from .library import URL, DEFAULT_HEADERS
-from .exceptions import UserNotFoundError
+from .exceptions import UserNotFoundError, ResponseError
 
 class A1:
     def __init__(self, cookies: dict) -> None:
@@ -12,11 +12,13 @@ class A1:
         """Adds important informations to the attributes of the class"""
         api = requests.get(
             f'{URL}{username}/?__a=1',
-            headers=self.headers
+            cookies=self.cookies,
+            headers=self.headers,
+            allow_redirects=False
             )
             
         if api.status_code not in [200,404]:
-            raise
+            raise ResponseError(f"A1.infos() responded {api.status_code}")
         elif api.status_code == 404:
             raise UserNotFoundError(f"{username} has not been found")
 

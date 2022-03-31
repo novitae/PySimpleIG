@@ -1,6 +1,7 @@
 # Global
 class RateLimitError(Exception): pass
 class MissingArgumentsError(Exception): pass
+class ResponseError(Exception): pass
 
 # Login
 class InvalidSessionIdError(Exception): pass
