@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
     name = 'pysimpleig',
-    version = '1.0.2',
+    version = '1.0.3',
     description = 'A library to help simplifying the usage instagram',
     author = 'novitae',
     url = 'https://github.com/novitae/PySimpleIG',

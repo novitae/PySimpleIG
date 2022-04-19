@@ -34,7 +34,8 @@ class A1:
             "is_verified",
             "profile_pic_url_hd",
             "username",
-            "followed_by_viewer"
+            "followed_by_viewer",
+            (("edge_owner_to_timeline_media","count"),"posts")
         ]
 
         retour = {}
