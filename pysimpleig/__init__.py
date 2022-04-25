@@ -5,9 +5,6 @@ A simple Python library focused on instagram.
 
 __version__ = "0.1"
 __author__ = "novitae"
-__all__ = [
-    "Login"
-]
 
 from .login import Login
 from .conversions import (
@@ -18,3 +15,6 @@ from .conversions import (
     cookies_to_sessionid
 )
 from .__a1 import A1
+from .library import (
+    fake_ios_headers
+)

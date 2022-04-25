@@ -6,7 +6,7 @@ from datetime import datetime
 from typing import Any
 
 from .syntaxes import is_sessionid_syntax_correct, is_username_syntax_correct
-from .exceptions import InvalidSessionIdError, InvalidCredentialsError, NotConnectedAccount, LoginError, RateLimitError, NotLoggedInError, MissingArgumentsError
+from .exceptions import InvalidSessionIdError, InvalidCredentialsError, NotConnectedAccount, LoginError, RateLimitError, MissingArgumentsError
 from .library import DEFAULT_HEADERS, self_infos_endpoints, URL
 from .conversions import sessionid_to_cookies
 

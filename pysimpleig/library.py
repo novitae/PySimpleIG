@@ -1,4 +1,4 @@
-from random import choice
+from random import choice, randint
 
 URL = "https://www.instagram.com/"
 BROWSER_UA = choice([
@@ -66,3 +66,20 @@ self_infos_endpoints = {
     "story_question_music_responses": "accounts/access_tool/story_question_music_responses?__a=1",
     "story_quiz_responses": "accounts/access_tool/story_quiz_responses?__a=1"
 }
+
+_IOS = ['15_0', '15_1', '15_0_1', '15_0_2', '15_2', '15_1_1', '15_3', '15_2_1', '15_4', '15_3_1']
+_VER = ['211.0.0.21.118', '210.0.0.16.67', '212.1.0.25.118', '212.1.0.25.118', '213.0.0.19.117', '213.0.0.19.117', '212.1.0.25.118', '213.0.0.19.117', '213.0.0.19.117', '213.0.0.19.117', '208.0.0.26.131', '208.0.0.26.131', '213.0.0.19.117', '213.0.0.19.117', '213.0.0.19.117', '213.0.0.19.117']
+_REF = [("10,1", "750x1334"),('10,2', "1080x1920"),('10,3', "1125x2436"),("10,4", "750x1334"),('10,5', "1080x1920"),('10,6', "1125x2436"),('11,2', "1125x2436"),('11,4', "1242x2688"),('11,6', "1242x2688"),('11,8', "828x1792"),('12,1', "828x1792"),('12,3', "1125x2436"),('12,5', "1242x2688"),('12,8', "750x1334"),('13,1', "1080x2340"),('13,2', "1170x2532"),('13,3', "1170x2532"),('13,4', "1284x2778"),('14,2', "1170x2532"),('14,3', "1284x2778"),('14,4', "1080x2340"),('14,5', "1170x2532")]
+# https://gist.github.com/adamawolf/3048717
+
+def fake_ios_headers() -> dict:
+    MODEL, SCREEN = choice(_REF)
+    return {
+        "Host": "i.instagram.com",
+        "Connection": "keep-alive",
+        "Accept": "*/*",
+        "X-IG-App-ID": "124024574287414",
+        "User-Agent": f'''Instagram {choice(_VER)} (iPhone{MODEL}; iOS {choice(_IOS)}; fr_FR; fr-FR; scale=2.00; {SCREEN}; {"".join([str(randint(0,9)) for _ in range(9)])}) AppleWebKit/420+''',
+        "Accept-Language": "fr-FR;q=1.0",
+        "Accept-Encoding": "gzip, deflate",
+    }

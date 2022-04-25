@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
     name = 'pysimpleig',
-    version = '1.0.3',
+    version = '1.0.4',
     description = 'A library to help simplifying the usage instagram',
     author = 'novitae',
     url = 'https://github.com/novitae/PySimpleIG',
@@ -10,5 +10,7 @@ setup(
         'Programming Language :: Python :: 3.9',
     ],
     packages = find_packages(),
-    install_requires = ["requests"],
+    install_requires = [
+        "requests",
+    ],
 )
