@@ -1,7 +1,7 @@
 import requests
 from random import choice, randint
 from re import findall
-from time import sleep
+from time import sleep, time
 from datetime import datetime
 from typing import Any
 
@@ -9,6 +9,11 @@ from .syntaxes import is_sessionid_syntax_correct, is_username_syntax_correct
 from .exceptions import InvalidSessionIdError, InvalidCredentialsError, NotConnectedAccount, LoginError, RateLimitError, MissingArgumentsError
 from .library import DEFAULT_HEADERS, self_infos_endpoints, URL
 from .conversions import sessionid_to_cookies
+
+from Cryptodome.Cipher import AES, PKCS1_v1_5
+from Cryptodome.PublicKey import RSA
+from Cryptodome.Random import get_random_bytes
+from base64 import b64decode, b64encode
 
 class Login:
     def check_login(self, session_id: str=None, cookies: dict=None) -> Any:
@@ -88,3 +93,34 @@ class Login:
             raise LoginError("unknown error")
 
         return self.session_id(session_id=postResp.cookies["sessionid"])
+
+def encrypt_password(password:str) -> str:
+    # https://github.com/adw0rd/instagrapi/blob/05f9cb684382663af1a5fb93f74fb9099d90ce18/instagrapi/mixins/password.py
+    def password_publickeys() -> tuple:
+        resp = requests.get('https://i.instagram.com/api/v1/qe/sync/')
+        publickeyid = int(resp.headers.get('ig-set-password-encryption-key-id'))
+        publickey = resp.headers.get('ig-set-password-encryption-pub-key')
+        return publickeyid, publickey
+
+    publickeyid, publickey = password_publickeys()
+    session_key = get_random_bytes(32)
+    iv = get_random_bytes(12)
+    timestamp = str(int(time()))
+    decoded_publickey = b64decode(publickey.encode())
+    recipient_key = RSA.import_key(decoded_publickey)
+    cipher_rsa = PKCS1_v1_5.new(recipient_key)
+    rsa_encrypted = cipher_rsa.encrypt(session_key)
+    cipher_aes = AES.new(session_key, AES.MODE_GCM, iv)
+    cipher_aes.update(timestamp.encode())
+    aes_encrypted, tag = cipher_aes.encrypt_and_digest(password.encode("utf8"))
+    size_buffer = len(rsa_encrypted).to_bytes(2, byteorder='little')
+    payload = b64encode(b''.join([
+        b"\x01",
+        publickeyid.to_bytes(1, byteorder='big'),
+        iv,
+        size_buffer,
+        rsa_encrypted,
+        tag,
+        aes_encrypted
+    ]))
+    return f"#PWD_INSTAGRAM:4:{timestamp}:{payload.decode()}"

@@ -6,7 +6,10 @@ A simple Python library focused on instagram.
 __version__ = "0.1"
 __author__ = "novitae"
 
-from .login import Login
+from .login import (
+    Login,
+    encrypt_password
+    )
 from .conversions import (
     sessionid_to_cookies,
     sessionid_to_id,
